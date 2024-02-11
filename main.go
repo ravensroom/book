@@ -1,16 +1,22 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
+	"github.com/ravensroom/code-hc/agent"
+)
+
+// Define cmd line flags
+var (
+	messageFlag = flag.String("m", "", "General context of the commit")
 )
 
 func main() {
-	fmt.Println("Initializing code health checker...")
-	wd, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
+	flag.Parse()
+	userMessage := *messageFlag
+	if userMessage == "" {
+		fmt.Println("Error: -m flag is required")
+		return
 	}
-	fmt.Println("Current directory: ", wd)
-	os.Exit(0)
+	fmt.Println(agent.GetBotResponseMessage(userMessage))
 }
