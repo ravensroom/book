@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	GitFlag = flag.String("g", "", "Git show/diff command\nExample: -g \"git show\" or -g \"git diff\"")
+	GitFlag = flag.String("g", "", "Git show/diff/archive command\nExample: -g \"git show\" or -g \"git diff\" or -g \"git archive HEAD [path]\"")
 )
 
-var ALLOWED_GIT_COMMANDS = []string{"git show", "git diff"}
+var ALLOWED_GIT_COMMANDS = []string{"git show", "git diff", "git archive"}
 
 func init() {
 	flag.Parse()
@@ -37,7 +37,7 @@ func init() {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Println("Git command not fonud. Default to git show")
-		*GitFlag = "git show"
+		fmt.Println("Git command not found. Default to git diff")
+		*GitFlag = "git diff"
 	}
 }

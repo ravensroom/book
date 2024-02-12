@@ -15,7 +15,7 @@ type Agent struct {
 }
 
 func NewAgent(userInstruction string, gitOutput string) *Agent {
-	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following instruction: {" + userInstruction + "} and the git show/diff result: {" + gitOutput + "}. Please provide your suggestions to the user."
+	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following instruction: {" + userInstruction + "} and the git show/diff/archive result: {" + gitOutput + "}. Please provide your suggestions to the user."
 
 	agent := &Agent{
 		client:      openai.NewClient(env.OPENAI_API_KEY),
@@ -39,11 +39,11 @@ func (a *Agent) GetBotResponseStream(userQuestion *string) (*openai.ChatCompleti
 		if errors.As(err, &e) {
 			switch e.HTTPStatusCode {
 			case 401:
-				return nil, errors.New("Invalid API key (do not retry)")
+				return nil, errors.New("Invalid API key")
 			case 429:
-				return nil, errors.New("Rate limit exceeded (wait and retry)")
+				return nil, errors.New("Rate limit exceeded")
 			case 500:
-				return nil, errors.New("openai server error (wait and retry)")
+				return nil, errors.New("openai server error")
 			}
 		}
 		return nil, err
