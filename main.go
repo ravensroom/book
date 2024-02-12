@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/ravensroom/code-hc/agent"
+	"github.com/ravensroom/code-hc/agent/helper"
+	"github.com/sashabaranov/go-openai"
 	"os"
 	"os/exec"
 	"strings"
@@ -32,7 +34,7 @@ func main() {
 	agent := agent.NewAgent(userInstruction, diffResult)
 	fmt.Println("\nYour instruction and git diff have been uploaded for bot to process. Fetching bot reply...")
 	var userQuestion *string
-	fmt.Println("\nBot: ", agent.GetBotResponseMessage(userQuestion))
+	processUserQuestionWithBot(agent, userQuestion)
 	for {
 		fmt.Print("\nUser: ")
 		input := getUserInput()
@@ -40,8 +42,34 @@ func main() {
 			break
 		}
 		userQuestion = &input
-		fmt.Println()
-		fmt.Print("\nBot: ", agent.GetBotResponseMessage(userQuestion))
+		processUserQuestionWithBot(agent, userQuestion)
+	}
+}
+
+func processUserQuestionWithBot(agent *agent.Agent, userQuestion *string) {
+	if userQuestion != nil {
+		agent.AddMessage(openai.ChatMessageRoleUser, *userQuestion)
+	}
+	stream, err := agent.GetBotResponseStream(userQuestion)
+	if err != nil {
+		fmt.Println("Error in getting bot response: ", err)
+		os.Exit(1)
+	}
+	var botResponseMessage string
+	fmt.Print("\nBot: ")
+	for {
+		response := helper.ReadBotResponseStream(stream)
+		if response.Error != nil {
+			fmt.Println("Error in reading bot response stream: ", err)
+			os.Exit(1)
+		}
+		if response.EOF {
+			agent.AddMessage(openai.ChatMessageRoleAssistant, botResponseMessage)
+			fmt.Println()
+			break
+		}
+		botResponseMessage += response.Chunk
+		fmt.Print(response.Chunk)
 	}
 }
 

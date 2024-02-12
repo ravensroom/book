@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"errors"
 	"github.com/ravensroom/code-hc/utils/env"
 	openai "github.com/sashabaranov/go-openai"
 )
@@ -14,40 +15,48 @@ type Agent struct {
 }
 
 func NewAgent(userInstruction string, gitDiff string) *Agent {
-	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following background information: {" + userInstruction + "} and the git diff content: " + gitDiff + ". Please provide your suggestions to the user."
+	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following background information: {" + userInstruction + "} and the git diff content: {" + gitDiff + "}. Please provide your suggestions to the user."
 
-	return &Agent{
+	agent := &Agent{
 		client:      openai.NewClient(env.OPENAI_API_KEY),
 		model:       openai.GPT4,
 		initContext: instruction,
-		messages: &[]openai.ChatCompletionMessage{
-			{
-				Role:    "system",
-				Content: instruction,
-			},
-		},
 	}
+	agent.AddMessage(openai.ChatMessageRoleSystem, instruction)
+	return agent
 }
 
-func (a *Agent) GetBotResponseMessage(userQuestion *string) string {
-	if userQuestion != nil {
-		*a.messages = append(*a.messages, openai.ChatCompletionMessage{
-			Role:    "user",
-			Content: *userQuestion,
-		})
+func (a *Agent) GetBotResponseStream(userQuestion *string) (*openai.ChatCompletionStream, error) {
+	e := &openai.APIError{}
+	ctx := context.Background()
+	req := openai.ChatCompletionRequest{
+		Model:    a.model,
+		Messages: *a.messages,
+		Stream:   true,
 	}
-
-	resp, err := a.client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model:    a.model,
-			Messages: *a.messages,
-		},
-	)
+	stream, err := a.client.CreateChatCompletionStream(ctx, req)
 	if err != nil {
-		return "Error in openai chat completion " + err.Error()
+		if errors.As(err, &e) {
+			switch e.HTTPStatusCode {
+			case 401:
+				return nil, errors.New("Invalid API key (do not retry)")
+			case 429:
+				return nil, errors.New("Rate limit exceeded (wait and retry)")
+			case 500:
+				return nil, errors.New("openai server error (wait and retry)")
+			}
+		}
+		return nil, err
 	}
-	responseMessage := resp.Choices[0].Message
-	*a.messages = append(*a.messages, responseMessage)
-	return responseMessage.Content
+	return stream, nil
+}
+
+func (a *Agent) AddMessage(role string, content string) {
+	if a.messages == nil {
+		a.messages = &[]openai.ChatCompletionMessage{}
+	}
+	*a.messages = append(*a.messages, openai.ChatCompletionMessage{
+		Role:    role,
+		Content: content,
+	})
 }
