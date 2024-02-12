@@ -60,3 +60,7 @@ func (a *Agent) AddMessage(role string, content string) {
 		Content: content,
 	})
 }
+
+func (a *Agent) SetClient(client *openai.Client) {
+	a.client = client
+}

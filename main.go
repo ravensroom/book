@@ -1,27 +1,29 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/ravensroom/code-hc/agent"
 	"github.com/ravensroom/code-hc/agent/helper"
+	"github.com/ravensroom/code-hc/utils/env"
 	"github.com/ravensroom/code-hc/utils/flag"
+	"github.com/ravensroom/code-hc/utils/input"
 	"github.com/sashabaranov/go-openai"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
 	gitCommand := *flag.GitFlag
 	gitOutput := getGitCommandOutput(gitCommand)
 	fmt.Print("\033[1mEnter instruction for the bot: \033[0m")
-	userInstruction := getUserInput()
+	userInstruction := input.GetUserInput()
 	agent := agent.NewAgent(userInstruction, gitOutput)
 	var userQuestion *string
 	processUserQuestionWithBot(agent, userQuestion)
 	for {
 		fmt.Print("\n\033[1;33mUser:\033[0m ")
-		input := getUserInput()
+		input := input.GetUserInput()
 		if input == "q" {
 			break
 		}
@@ -37,7 +39,13 @@ func processUserQuestionWithBot(agent *agent.Agent, userQuestion *string) {
 	stream, err := agent.GetBotResponseStream(userQuestion)
 	if err != nil {
 		fmt.Println("Error in getting bot response: ", err)
-		os.Exit(1)
+		if strings.Contains(err.Error(), "Invalid API key") {
+			apiKey := env.AskAndSaveAPIKeyToConfig()
+			agent.SetClient(openai.NewClient(apiKey))
+			processUserQuestionWithBot(agent, userQuestion)
+		} else {
+			os.Exit(1)
+		}
 	}
 	var botResponseMessage string
 	fmt.Print("\n\033[1;32mBot:\033[0m ")
@@ -55,12 +63,6 @@ func processUserQuestionWithBot(agent *agent.Agent, userQuestion *string) {
 		botResponseMessage += response.Chunk
 		fmt.Print(response.Chunk)
 	}
-}
-
-func getUserInput() string {
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	return scanner.Text()
 }
 
 func getGitCommandOutput(gitCommand string) string {
