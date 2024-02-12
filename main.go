@@ -14,13 +14,13 @@ import (
 func main() {
 	gitCommand := *flag.GitFlag
 	gitOutput := getGitCommandOutput(gitCommand)
-	fmt.Print("Enter instruction for the bot: ")
+	fmt.Print("\033[1mEnter instruction for the bot: \033[0m")
 	userInstruction := getUserInput()
 	agent := agent.NewAgent(userInstruction, gitOutput)
 	var userQuestion *string
 	processUserQuestionWithBot(agent, userQuestion)
 	for {
-		fmt.Print("\nUser: ")
+		fmt.Print("\n\033[1;33mUser:\033[0m ")
 		input := getUserInput()
 		if input == "q" {
 			break
@@ -40,7 +40,7 @@ func processUserQuestionWithBot(agent *agent.Agent, userQuestion *string) {
 		os.Exit(1)
 	}
 	var botResponseMessage string
-	fmt.Print("\nBot: ")
+	fmt.Print("\n\033[1;32mBot:\033[0m ")
 	for {
 		response := helper.ReadBotResponseStream(stream)
 		if response.Error != nil {
