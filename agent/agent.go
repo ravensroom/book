@@ -14,8 +14,8 @@ type Agent struct {
 	messages    *[]openai.ChatCompletionMessage
 }
 
-func NewAgent(userInstruction string, gitDiff string) *Agent {
-	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following background information: {" + userInstruction + "} and the git diff content: {" + gitDiff + "}. Please provide your suggestions to the user."
+func NewAgent(userInstruction string, gitOutput string) *Agent {
+	instruction := "The user is asking you do perform a code health check. He's likely reviewing a pull request or about to commit his code and he wants to make sure that the code is healthy and generally following best practices. He has provided the following instruction: {" + userInstruction + "} and the git show/diff result: {" + gitOutput + "}. Please provide your suggestions to the user."
 
 	agent := &Agent{
 		client:      openai.NewClient(env.OPENAI_API_KEY),

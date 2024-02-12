@@ -5,34 +5,18 @@ import (
 	"fmt"
 	"github.com/ravensroom/code-hc/agent"
 	"github.com/ravensroom/code-hc/agent/helper"
+	"github.com/ravensroom/code-hc/utils/flag"
 	"github.com/sashabaranov/go-openai"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 func main() {
-	fmt.Print("Background information for the bot: ")
+	gitCommand := *flag.GitFlag
+	gitOutput := getGitCommandOutput(gitCommand)
+	fmt.Print("Enter instruction for the bot: ")
 	userInstruction := getUserInput()
-
-	fmt.Print("Enter the git diff command: ")
-	gitDiffCmd := getUserInput()
-	if gitDiffCmd == "" {
-		gitDiffCmd = "git diff"
-	}
-	diffResult, err := getGitDiff(gitDiffCmd)
-	for err != nil {
-		fmt.Println("Error in getting git diff: ", err)
-		fmt.Print("Please re-enter the command or enter q to quit: ")
-		gitDiffCmd = getUserInput()
-		if gitDiffCmd == "q" {
-			os.Exit(0)
-		} else {
-			diffResult, err = getGitDiff(gitDiffCmd)
-		}
-	}
-	agent := agent.NewAgent(userInstruction, diffResult)
-	fmt.Println("\nYour instruction and git diff have been uploaded for bot to process. Fetching bot reply...")
+	agent := agent.NewAgent(userInstruction, gitOutput)
 	var userQuestion *string
 	processUserQuestionWithBot(agent, userQuestion)
 	for {
@@ -79,17 +63,25 @@ func getUserInput() string {
 	return scanner.Text()
 }
 
-func getGitDiff(diffCmd string) (string, error) {
-	if !strings.HasPrefix(diffCmd, "git diff") {
-		return "", fmt.Errorf("Invalid git diff command")
-	}
-	cmd := exec.Command("bash", "-c", diffCmd)
+func getGitCommandOutput(gitCommand string) string {
+	cmd := exec.Command("bash", "-c", gitCommand)
 	output, err := cmd.Output()
 	if err != nil {
 		if exitErr, ok := err.(*exec.ExitError); ok {
-			return "", fmt.Errorf("Git diff command error: %s", exitErr.Stderr)
+			fmt.Printf("%s command error: %s", gitCommand, exitErr.Stderr)
 		}
-		return "", fmt.Errorf("Error executing git diff command: %s", err)
+		fmt.Printf("Error executing git command: %s", err)
+		os.Exit(1)
 	}
-	return string(output), nil
+	if len(output) == 0 {
+		fmt.Printf("Warning: No outpt found from command [%s]\n", gitCommand)
+	}
+	lineCount := 0
+	for _, b := range output {
+		if b == '\n' {
+			lineCount++
+		}
+	}
+	fmt.Printf("Output from [%s] command: %d lines\n", gitCommand, lineCount)
+	return string(output)
 }
