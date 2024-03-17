@@ -1,8 +1,8 @@
-module github.com/ravensroom/code-hc
+module github.com/ravensroom/replica
 
 go 1.22.0
 
 require (
-	github.com/joho/godotenv v1.5.1 // indirect
-	github.com/sashabaranov/go-openai v1.19.3 // indirect
+	github.com/joho/godotenv v1.5.1
+	github.com/sashabaranov/go-openai v1.20.4
 )
