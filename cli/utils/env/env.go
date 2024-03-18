@@ -18,7 +18,7 @@ func init() {
 		content, _ := os.ReadFile(configFile)
 		OPENAI_API_KEY = strings.TrimSpace(string(content))
 	} else {
-		fmt.Println("OPENAI_API_KEY not found in config file ~/.codehcrc")
+		fmt.Println("OPENAI_API_KEY not found in config file ~/.replicarc")
 		err := godotenv.Load()
 		if err != nil {
 			fmt.Println(".env file not found. Reading system set environment variables")
@@ -28,7 +28,6 @@ func init() {
 			fmt.Println("OPENAI_API_KEY environment variable not set")
 		}
 		AskAndSaveAPIKeyToConfig()
-
 	}
 }
 
@@ -37,17 +36,30 @@ func AskAndSaveAPIKeyToConfig() string {
 	userInput := input.GetUserInput()
 	OPENAI_API_KEY = strings.TrimSpace(userInput)
 	configFile := getConfigFilePath()
-	info, _ := os.Stat(configFile)
-	permission := info.Mode().Perm()
-	if permission|0200 != 0 {
-		fmt.Println("No write permission to config file ~/.codehcrc")
+
+	_, err := os.Stat(configFile)
+	if os.IsNotExist(err) {
+		file, err := os.OpenFile(configFile, os.O_RDWR|os.O_CREATE, 0600)
+		if err != nil {
+			fmt.Printf("Failed to create config file: %s\n", err)
+			os.Exit(1)
+		}
+		file.Close()
+	} else if err != nil {
+		fmt.Printf("Failed to check config file: %s\n", err)
 		os.Exit(1)
 	}
-	_ = os.WriteFile(configFile, []byte(OPENAI_API_KEY), 0600)
+
+	err = os.WriteFile(configFile, []byte(OPENAI_API_KEY), 0600)
+	if err != nil {
+		fmt.Printf("Failed to write to config file: %s\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("API key saved to %s\n", configFile)
 	return OPENAI_API_KEY
 }
 
 func getConfigFilePath() string {
 	home, _ := os.UserHomeDir()
-	return home + "/.codehcrc"
+	return home + "/.replicarc"
 }
