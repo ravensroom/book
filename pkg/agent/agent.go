@@ -7,13 +7,6 @@ import (
 	"io"
 )
 
-type ModelType string
-
-const (
-	GPT3Dot5Turbo ModelType = openai.GPT3Dot5Turbo
-	GPT4          ModelType = openai.GPT4
-)
-
 type Context struct {
 	SystemInstruction string
 	UserInstruction   string
@@ -49,7 +42,7 @@ func NewAgent(apiKey string, opts ...AgentOptions) *Agent {
 		opt(agent)
 	}
 	if agent.model == "" {
-		agent.model = GPT3Dot5Turbo
+		agent.model = GPT4Dot5
 	}
 	if agent.contexts != nil {
 		agent.makeInitialMessages()

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ravensroom/replica/cli/utils/env"
+	"github.com/ravensroom/replica/cli/utils/flag"
 	"github.com/ravensroom/replica/cli/utils/input"
 	"github.com/ravensroom/replica/pkg/agent"
 	"github.com/sashabaranov/go-openai"
@@ -11,8 +12,11 @@ import (
 )
 
 func main() {
+	selectedModel := *flag.ModelFlag
+	fmt.Printf("Using model <%s>...\n", selectedModel)
 	agent := agent.NewAgent(
 		env.OPENAI_API_KEY,
+		agent.WithModel(agent.ModelType(selectedModel)),
 	)
 	var userQuestion *string
 	for {
