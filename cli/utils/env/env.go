@@ -3,7 +3,7 @@ package env
 import (
 	"fmt"
 	"github.com/joho/godotenv"
-	"github.com/ravensroom/replica/cli/utils/input"
+	"github.com/ravensroom/book/cli/utils/input"
 	"os"
 	"strings"
 )

@@ -1,4 +1,4 @@
-module github.com/ravensroom/replica
+module github.com/ravensroom/book
 
 go 1.22.0
 

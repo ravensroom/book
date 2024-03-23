@@ -3,7 +3,7 @@ package flag
 import (
 	"flag"
 	"fmt"
-	"github.com/ravensroom/replica/pkg/agent"
+	"github.com/ravensroom/book/pkg/agent"
 )
 
 var (

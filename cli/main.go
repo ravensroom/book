@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/ravensroom/replica/cli/utils/env"
-	"github.com/ravensroom/replica/cli/utils/flag"
-	"github.com/ravensroom/replica/cli/utils/input"
-	"github.com/ravensroom/replica/pkg/agent"
+	"github.com/ravensroom/book/cli/utils/env"
+	"github.com/ravensroom/book/cli/utils/flag"
+	"github.com/ravensroom/book/cli/utils/input"
+	"github.com/ravensroom/book/pkg/agent"
 	"github.com/sashabaranov/go-openai"
 	"os"
 	"strings"
