@@ -1,7 +1,19 @@
+import { getAllBooks } from "@/api/book";
+import { Book } from "@/components/home/Book";
+import Link from "next/link";
+
 export default function Home() {
+  const books = getAllBooks();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-6xl font-bold">Welcome to Replica</h1>
+    <main className="p-12">
+      <ul className="flex flex-wrap gap-5">
+        {books.map((book) => (
+          <Link key={book.id} href={`/book/${book.id}`}>
+            <Book book={book} />
+          </Link>
+        ))}
+      </ul>
     </main>
   );
 }
