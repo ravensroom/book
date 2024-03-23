@@ -6,7 +6,7 @@ export default function Home() {
   const books = getAllBooks();
 
   return (
-    <main className="p-12">
+    <main className="flex-1 p-12">
       <ul className="flex flex-wrap gap-5">
         {books.map((book) => (
           <Link key={book.id} href={`/book/${book.id}`}>

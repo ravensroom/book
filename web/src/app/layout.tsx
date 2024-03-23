@@ -14,9 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <meta name="color-scheme" content="light" />
-      <body className="">
+      <body className="min-h-screen flex flex-col">
         <Header />
-        <div className="min-h-screen bg-gray-100">{children}</div>
+        <div className="flex flex-1 bg-gray-100">{children}</div>
       </body>
     </html>
   );

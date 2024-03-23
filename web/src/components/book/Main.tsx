@@ -15,7 +15,7 @@ export function Main(props: MainProps) {
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
 
   return (
-    <div className="flex">
+    <div className="flex flex-1 min-h-full">
       <Sidebar
         book={book}
         onClickBook={() => {
@@ -46,10 +46,10 @@ type BookViewProps = {
 function BookView(props: BookViewProps) {
   const { book } = props;
   return (
-    <>
+    <div className="flex flex-col flex-1">
       <h1 className="text-2xl font-semibold">{book.title}</h1>
       <p className="text-lg">{book.description}</p>
-    </>
+    </div>
   );
 }
 
@@ -57,13 +57,8 @@ type MainContainerProps = {
   className?: string;
   children: React.ReactNode;
 };
+
 function MainContainer(props: MainContainerProps) {
   const { className, children } = props;
-  return (
-    <div
-      className={`flex-1 flex flex-col min-h-screen p-4 bg-gray-100 ${className}`}
-    >
-      {children}
-    </div>
-  );
+  return <div className={`flex flex-1 p-4 ${className}`}>{children}</div>;
 }

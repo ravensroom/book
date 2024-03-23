@@ -5,294 +5,120 @@ export const chapters: Array<Chapter> = [
     id: "a",
     bookId: "1",
     title: "Introduction",
-    main: [
+    samples: [
       {
-        id: "1",
+        id: "a1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter a",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "a2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter a",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["a1", "a2"],
   },
   {
     id: "b",
     bookId: "1",
-    title: "Chapter 1",
-    main: [
+    title: "Methodology",
+    samples: [
       {
-        id: "1",
+        id: "b1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter b",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "b2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter b",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["b1"],
   },
   {
     id: "i",
     bookId: "2",
     title: "Introduction",
-    main: [
+    samples: [
       {
-        id: "1",
+        id: "i1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter i",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "i2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter i",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["i1"],
   },
   {
     id: "j",
     bookId: "2",
-    title: "Chapter 1",
-    main: [
+    title: "Methodology",
+    samples: [
       {
-        id: "1",
+        id: "j1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter j",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "j2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter j",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["j1"],
   },
   {
     id: "p",
     bookId: "3",
     title: "Introduction",
-    main: [
+    samples: [
       {
-        id: "1",
+        id: "p1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter p",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "p2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter p",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["p1"],
   },
   {
     id: "q",
     bookId: "3",
-    title: "Chapter 1",
-    main: [
+    title: "Methodology",
+    samples: [
       {
-        id: "1",
+        id: "q1",
         version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
+        content: "This is the first sample of chapter q",
+        isPrimary: true,
       },
       {
-        id: "2",
+        id: "q2",
         version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
+        content: "This is the second sample of chapter q",
+        isPrimary: false,
       },
     ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "x",
-    bookId: "4",
-    title: "Introduction",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "y",
-    bookId: "4",
-    title: "Chapter 1",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "m",
-    bookId: "5",
-    title: "Introduction",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "n",
-    bookId: "5",
-    title: "Chapter 1",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "c",
-    bookId: "6",
-    title: "Introduction",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "d",
-    bookId: "6",
-    title: "Chapter 1",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "e",
-    bookId: "7",
-    title: "Introduction",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
-  },
-  {
-    id: "f",
-    bookId: "7",
-    title: "Chapter 1",
-    main: [
-      {
-        id: "1",
-        version: "1",
-        content:
-          "This is the first version of the main content of the chapter.",
-      },
-      {
-        id: "2",
-        version: "2",
-        content:
-          "This is the second version of the main content of the chapter.",
-      },
-    ],
-    activeMainId: "1",
-    sourceIds: ["x", "y"],
+    sourceIds: ["q1"],
   },
 ];

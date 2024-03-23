@@ -15,7 +15,7 @@ export function Sidebar(props: SidebarProps) {
   const { book, onClickBook, onClickChapter, onClickAddChapter } = props;
 
   return (
-    <div className="min-h-screen w-56 bg-white">
+    <div className="w-64 bg-white">
       <SidebarItem
         title={book.title}
         className="hover:bg-gray-100 font-semibold"
