@@ -12,3 +12,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "any", "postgres"] }
 dotenv = "0.15.0"
+serde = "1.0.197"
