@@ -9,6 +9,7 @@ use sqlx::postgres::{PgPool, PgPoolOptions};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+use server::env::{load_env, EnvVar};
 use std::time::Duration;
 
 #[tokio::main]
@@ -21,14 +22,13 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let db_connection_str = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgres://postgres:password@localhost".to_string());
+    load_env();
 
     // set up connection pool
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .acquire_timeout(Duration::from_secs(3))
-        .connect(&db_connection_str)
+        .connect(&EnvVar::DatabaseUrl.get())
         .await
         .expect("can't connect to database");
 
@@ -41,8 +41,9 @@ async fn main() {
         .with_state(pool);
 
     // run it with hyper
-    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
-    tracing::debug!("listening on {}", listener.local_addr().unwrap());
+    let addr = format!("127.0.0.1:{}", EnvVar::Port.get());
+    let listener = TcpListener::bind(addr).await.unwrap();
+    tracing::info!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
 
