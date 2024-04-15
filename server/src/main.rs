@@ -5,23 +5,15 @@ use axum::{
     routing::get,
     Router,
 };
-use sqlx::postgres::{PgPool, PgPoolOptions};
-use tokio::net::TcpListener;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
 use server::env::{load_env, EnvVar};
+use server::utils::logger::setup_logger;
+use sqlx::postgres::{PgPool, PgPoolOptions};
 use std::time::Duration;
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::registry()
-        .with(
-            tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "example_tokio_postgres=debug".into()),
-        )
-        .with(tracing_subscriber::fmt::layer())
-        .init();
-
+    setup_logger();
     load_env();
 
     // set up connection pool
@@ -43,7 +35,7 @@ async fn main() {
     // run it with hyper
     let addr = format!("127.0.0.1:{}", EnvVar::Port.get());
     let listener = TcpListener::bind(addr).await.unwrap();
-    tracing::info!("listening on {}", listener.local_addr().unwrap());
+    tracing::info!("Listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
 

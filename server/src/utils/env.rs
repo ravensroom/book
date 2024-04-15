@@ -1,11 +1,11 @@
 use dotenv::dotenv;
 use std::env;
-use tracing::log::{info, warn};
+use tracing::log;
 
 pub fn load_env() {
     match dotenv() {
         Ok(_) => {
-            info!("Loaded environment variables from .env file");
+            log::info!("Loaded environment variables from .env file");
         }
         Err(e) => {
             panic!("Failed to load environment variables from .env file: {}", e);
@@ -41,11 +41,11 @@ impl EnvVar {
         let EnvVarConfig { key, default } = self.config();
         match env::var(&key) {
             Ok(value) => {
-                info!("Using {} for {}", value, key);
+                log::info!("Using {} for {}", value, key);
                 value
             }
             Err(_) => {
-                warn!("{} not found. Using default value: {}", key, default);
+                log::warn!("{} not found. Using default value: {}", key, default);
                 default
             }
         }
